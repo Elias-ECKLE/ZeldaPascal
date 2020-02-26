@@ -63,7 +63,7 @@ begin
        //verif et pose des items coeur et mystere
     for i:=4 to 5 do
     begin
-        for j:=1 to 3 do
+        for j:=1 to 6 do
         begin
             a:=random(maxLa)+1;
             b:=random(maxLg)+1;
@@ -76,7 +76,7 @@ begin
         end;
     end;
           //verif et pose des deux trésors
-        for j:=1 to 2 do
+        for j:=1 to 4 do
         begin
             a:=random(maxLa)+1;
             b:=random(maxLg)+1;
@@ -121,41 +121,48 @@ begin
             for j:=1 to maxLa do
             begin
                 textbackground(6);
-                if (map[j,i]>=4) and (map[j,i]<=6) then
+                if (map[j,i]=4) then
+                    textcolor(red)
+                else if (map[j,i]=5) then  
                     textcolor(blue)
+                else if (map[j,i]=6) then   
+                    textcolor(yellow)
                 else
                     textcolor(black);
                 write(NtoC(map[j,i]));
             end;
         writeln;
     end;
+    textbackground(black);
 end;
 
 
 
 procedure affichLink(posLink:coord;car:char);
 begin
+    textbackground(6);
     gotoxy(posLink.x,posLink.y);
     textcolor(green);
     writeln(car);
+    textbackground(black);
 end;
 
 procedure affichStats(nbDuStat:integer;nbStat: integer);
 begin
     if nbDuStat=4 then
         begin
-        textcolor(blue);
-        gotoxy(30,7); write(nbStat,' ',NtoC(nbDuStat));
+        textcolor(red);
+        gotoxy(30,7); write(nbStat,'',NtoC(nbDuStat));
         end
     else if nbDuStat=5 then
         begin
         textcolor(blue);
-        gotoxy(34,7); write(nbStat,' ',NtoC(nbDuStat));
+        gotoxy(35,7); write(nbStat,'',NtoC(nbDuStat));
         end
     else if nbDuStat=6 then
         begin
-        textcolor(blue);
-        gotoxy(39,7); write(nbStat,' ',NtoC(nbDuStat));
+        textcolor(yellow);
+        gotoxy(41,7); write(nbStat,'',NtoC(nbDuStat));
         end;
 end;
 
@@ -323,11 +330,14 @@ end;
 procedure playMusic(morceau:integer);
 begin
     case morceau of
-     0: sndPlaySound('C:\freePascal\Tableaux\Zelda\sounds\mainThemeZelda.wav', snd_Async or snd_loop);
-     1: sound(5000);
-     4: sound(2000);
-     5: sound(3000);
-     6: sndPlaySound('C:\freePascal\Tableaux\Zelda\sounds\ouvertureTresor.wav', snd_Async or snd_NoDefault);
+     0: sndPlaySound('C:\freePascal\Tableaux\zelda\ProgZelda\sounds\mainThemeZeldaAccueil.wav', snd_Async or snd_loop); //music Accueil
+     1: sndPlaySound('C:\freePascal\Tableaux\zelda\ProgZelda\sounds\mainThemeZelda.wav',snd_Async or snd_loop);//music ambiance jeu
+     2: sound(5000);//music bloque obstacle
+     4: sound(2000);//music attrape coeur
+     5: sound(3000);//music attrape point interrogation
+     6: sndPlaySound('C:\freePascal\Tableaux\zelda\ProgZelda\sounds\ouvertureTresor.wav', snd_Async or snd_NoDefault);//musique ouverture tresor
+     10:sndPlaySound('C:\freePascal\Tableaux\zelda\ProgZelda\sounds\linkVictoire.wav',snd_Async or snd_NoDefault);//musique victoire
+     11:sndPlaySound('C:\freePascal\Tableaux\zelda\ProgZelda\sounds\zeldaEnding.wav',snd_Async or snd_loop);
      end;
 
 end;
@@ -374,21 +384,23 @@ begin
        end
     else if(posLinkTempX>0) and (posLinkTempX<=maxLa) and (posLinkTempY>0) and (posLinkTempY<=maxLg) and(link.hyrule[posLinkTempX, posLinkTempY]=6) then
        begin
+            link.nb.tresor:=link.nb.tresor+1;
+            affichStats(link.hyrule[posLinkTempX, posLinkTempY],link.nb.tresor);
+            playMusic(link.hyrule[posLinkTempX,posLinkTempY]);
+            link.hyrule[posLinkTempX, posLinkTempY]:=0;
+            delay(8000);
+
             affichLink(link.position,' ');
             link.position.x:=posLinkTempX;
             link.position.y:=posLinkTempY;
             affichLink(link.position,'L');
 
-            link.nb.tresor:=link.nb.tresor+1;
-            affichStats(link.hyrule[posLinkTempX, posLinkTempY],link.nb.tresor);
-            playMusic(link.hyrule[posLinkTempX,posLinkTempY]);
-            link.hyrule[posLinkTempX, posLinkTempY]:=0;
-            delay(12000);
-            playMusic(0);
+            delay(4000);
+            playMusic(1);
        end
     else
         begin
-            playMusic(1);
+            playMusic(2);
             delay(150);
             nosound;
         end;
@@ -399,55 +411,103 @@ end;
 
 
 
+procedure menuAccueil();
+var phraseIntro:string;
+var increm,i:integer;
+var ch:char;
+begin
+
+    playMusic(0);
+    gotoxy(47,8);
+    write('The Legend of Zelda');
+
+    repeat
+        gotoxy(41,11);
+        phraseIntro:='Appuyer sur entrer pour commencer';
+        write(phraseIntro);
+        delay(1000);
+        delLine;
+        delay(1000);
+    until keypressed;
+    delLine
+end;
+
+
+procedure affichLegende();
+begin
+    textcolor(white);
+    gotoxy(30,15);
+    write('A: Arbre');
+    gotoxy(30,16);
+    write('R: Rocher');
+    gotoxy(30,17);
+    write('E: Eau');
+
+    gotoxy(44,15);
+    write('C: Coeur');
+    gotoxy(44,16);
+    write('T: Tresor');
+    gotoxy(44,17);
+    write('?: Point mystere');
+
+    gotoxy(30,20);
+    write('Objectif: Trouver les quatre coffres cachés par Ganon (tresors)');     
+end;
+
+
+procedure menuFinJeu();
+begin
+    clrscr;
+    playMusic(10);
+    gotoxy(32,11);
+    textcolor(white);
+    write('Bravo Link, vous avez trouve la totalite des coffres');
+    delay(10000);
+
+    clrscr;
+    playMusic(11);
+    gotoxy(53,11);
+    write('Credits');
+    gotoxy(42,14 );
+    write('Programme et realise par Elias');
+    readln;
+
+end;
+
+
+
 // prog principal
 //BUT:se déplacer avec Link dans Hyrule (tableau à deux dimensions présentant trois obstacles : Eau, Arbre, Rocher)
 //ENTREE:inputs qui permettent de déplacer Link vers le haut,bas,gauche,droite
 //SORTIE: affichage d'Hyrule et position de Link qui change selon le déplacement effectué
-
 var ch:char;
 var link:joueur;
 var posLinkTemp:coord;
-var fin:boolean;
-{var
-  image: TFPCustomImage;
-  reader: TFPCustomImageReader;}
-
 BEGIN
-    //init de la map avec ses différents obstacles et placement initial de Link
+    //prereglages et menu d'intro
     clrscr;
     randomize;
     cursoroff;
-    playMusic(0);
-    gotoxy(51,8);
-    write('The Legend of Zelda');
-    gotoxy(45,10);
-    write('Appuyer sur entrer pour commencer');
-
-
-
-    readln;
-
+    menuAccueil();
     clrscr;
+    //init de la map avec ses différents obstacles et placement initial de Link
     posLinkTemp.x:=posX_L;
     posLinkTemp.y:=posY_L;
-
     link.position.x:=posX_L;
     link.position.y:=posY_L;
     link.nb.coeur:=0;
     link.nb.ptsMystere:=0;
     link.nb.tresor:=0;
     link.hyrule:=init(link.hyrule);
-
-
     affichTab(link.hyrule);
     affichLink(link.position,'L');
 
 
 
 
-
-
     //déplacements de Link avec les quatres flèches
+        //affichage objectif du jeu et la légende
+    affichLegende();
      repeat
     ch:=ReadKey;
     case ch of
@@ -464,7 +524,12 @@ BEGIN
     end;
      posLinkTemp.x:=link.position.x;
      posLinkTemp.y:=link.position.y;
-  until ch=#27 {Esc}
+  until (ch=#27) {Esc} or (link.nb.tresor=4);
+
+
+
+  //Fin du jeu
+  menuFinJeu();
 
 END.
 
