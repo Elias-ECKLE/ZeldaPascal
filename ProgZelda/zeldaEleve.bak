@@ -63,7 +63,7 @@ begin
        //verif et pose des items coeur et mystere
     for i:=4 to 5 do
     begin
-        for j:=1 to 3 do
+        for j:=1 to 6 do
         begin
             a:=random(maxLa)+1;
             b:=random(maxLg)+1;
@@ -76,7 +76,7 @@ begin
         end;
     end;
           //verif et pose des deux trésors
-        for j:=1 to 2 do
+        for j:=1 to 4 do
         begin
             a:=random(maxLa)+1;
             b:=random(maxLg)+1;
@@ -123,9 +123,9 @@ begin
                 textbackground(6);
                 if (map[j,i]=4) then
                     textcolor(red)
-                else if (map[j,i]=5) then  
+                else if (map[j,i]=5) then
                     textcolor(blue)
-                else if (map[j,i]=6) then   
+                else if (map[j,i]=6) then
                     textcolor(yellow)
                 else
                     textcolor(black);
@@ -330,14 +330,14 @@ end;
 procedure playMusic(morceau:integer);
 begin
     case morceau of
-     0: sndPlaySound('C:\freePascal\Tableaux\zelda\ProgZelda\sounds\mainThemeZeldaAccueil.wav', snd_Async or snd_loop); //music Accueil
-     1: sndPlaySound('C:\freePascal\Tableaux\zelda\ProgZelda\sounds\mainThemeZelda.wav',snd_Async or snd_loop);//music ambiance jeu
+     0: sndPlaySound('sounds\mainThemeZeldaAccueil.wav', snd_Async or snd_loop); //music Accueil
+     1: sndPlaySound('C:\pascal\Tableaux\zelda\ProgZelda\sounds\mainThemeZelda.wav',snd_Async or snd_loop);//music ambiance jeu
      2: sound(5000);//music bloque obstacle
      4: sound(2000);//music attrape coeur
      5: sound(3000);//music attrape point interrogation
-     6: sndPlaySound('C:\freePascal\Tableaux\zelda\ProgZelda\sounds\ouvertureTresor.wav', snd_Async or snd_NoDefault);//musique ouverture tresor
-     10:sndPlaySound('C:\freePascal\Tableaux\zelda\ProgZelda\sounds\ouvertureTresor.wav',snd_Async or snd_NoDefault);//musique victoire
-     11:sndPlaySound('C:\freePascal\Tableaux\zelda\ProgZelda\sounds\mainThemeZelda.wav',snd_Async or snd_loop);
+     6: sndPlaySound('C:\pascal\Tableaux\zelda\ProgZelda\sounds\ouvertureTresor.wav', snd_Async or snd_NoDefault);//musique ouverture tresor
+     10:sndPlaySound('C:\pascal\Tableaux\zelda\ProgZelda\sounds\linkVictoire.wav',snd_Async or snd_NoDefault);//musique victoire
+     11:sndPlaySound('C:\pascal\Tableaux\zelda\ProgZelda\sounds\zeldaEnding.wav',snd_Async or snd_loop);
      end;
 
 end;
@@ -443,13 +443,15 @@ begin
     gotoxy(30,17);
     write('E: Eau');
 
-    gotoxy(35,15);
-    write('C : Coeur');
-    gotoxy(35,16)
-    write('T:Trésor');
+    gotoxy(44,15);
+    write('C: Coeur');
+    gotoxy(44,16);
+    write('T: Tresor');
+    gotoxy(44,17);
+    write('?: Point mystere');
 
     gotoxy(30,20);
-    write('Objectif: Recuperer la totalite des coffres (tresors)');
+    write('Objectif: Trouver les quatre coffres cachés par Ganon (tresors)');
 end;
 
 
@@ -457,16 +459,18 @@ procedure menuFinJeu();
 begin
     clrscr;
     playMusic(10);
-    gotoxy(41,11);
-    write('Bravo Link, vous avez trouvé la totalité des coffres');
+    gotoxy(32,11);
+    textcolor(white);
+    write('Bravo Link, vous avez trouve la totalite des coffres');
     delay(10000);
 
     clrscr;
     playMusic(11);
-    gotoxy(45,11);
-    write('Crédits');
-    gotoxy(40,13);
-    write('Programmé et réalisé par Elias')
+    gotoxy(53,11);
+    write('Credits');
+    gotoxy(42,14 );
+    write('Programme et realise par Elias');
+    readln;
 
 end;
 
@@ -520,7 +524,7 @@ BEGIN
     end;
      posLinkTemp.x:=link.position.x;
      posLinkTemp.y:=link.position.y;
-  until (ch=#27) {Esc} or (link.nb.tresor=2);
+  until (ch=#27) {Esc} or (link.nb.tresor=4);
 
 
 

@@ -123,9 +123,9 @@ begin
                 textbackground(6);
                 if (map[j,i]=4) then
                     textcolor(red)
-                else if (map[j,i]=5) then  
+                else if (map[j,i]=5) then
                     textcolor(blue)
-                else if (map[j,i]=6) then   
+                else if (map[j,i]=6) then
                     textcolor(yellow)
                 else
                     textcolor(black);
@@ -330,14 +330,14 @@ end;
 procedure playMusic(morceau:integer);
 begin
     case morceau of
-     0: sndPlaySound('C:\freePascal\Tableaux\zelda\ProgZelda\sounds\mainThemeZeldaAccueil.wav', snd_Async or snd_loop); //music Accueil
-     1: sndPlaySound('C:\freePascal\Tableaux\zelda\ProgZelda\sounds\mainThemeZelda.wav',snd_Async or snd_loop);//music ambiance jeu
+     0: sndPlaySound('sounds\mainThemeZeldaAccueil.wav', snd_Async or snd_loop); //music Accueil
+     1: sndPlaySound('sounds\mainThemeZelda.wav',snd_Async or snd_loop);//music ambiance jeu
      2: sound(5000);//music bloque obstacle
      4: sound(2000);//music attrape coeur
      5: sound(3000);//music attrape point interrogation
-     6: sndPlaySound('C:\freePascal\Tableaux\zelda\ProgZelda\sounds\ouvertureTresor.wav', snd_Async or snd_NoDefault);//musique ouverture tresor
-     10:sndPlaySound('C:\freePascal\Tableaux\zelda\ProgZelda\sounds\linkVictoire.wav',snd_Async or snd_NoDefault);//musique victoire
-     11:sndPlaySound('C:\freePascal\Tableaux\zelda\ProgZelda\sounds\zeldaEnding.wav',snd_Async or snd_loop);
+     6: sndPlaySound('sounds\ouvertureTresor.wav', snd_Async or snd_NoDefault);//musique ouverture tresor
+     10:sndPlaySound('sounds\linkVictoire.wav',snd_Async or snd_NoDefault);//musique victoire
+     11:sndPlaySound('sounds\zeldaEnding.wav',snd_Async or snd_loop);
      end;
 
 end;
@@ -451,7 +451,7 @@ begin
     write('?: Point mystere');
 
     gotoxy(30,20);
-    write('Objectif: Trouver les quatre coffres cachés par Ganon (tresors)');     
+    write('Objectif: Trouver les quatre coffres cachés par Ganon (tresors)');
 end;
 
 
